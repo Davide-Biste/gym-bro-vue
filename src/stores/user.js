@@ -6,7 +6,7 @@ export const useUserStore = defineStore('user', {
     return {
       id: null,
       token: null,
-      details: [],
+      details: {},
     }
   },
   actions: {

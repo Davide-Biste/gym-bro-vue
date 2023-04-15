@@ -11,6 +11,7 @@ export default {
       });
       const user = useUserStore();
       await user.setToken(token);
+      await user.setDetails({username, password});
       return token;
     } catch (error) {
       console.log({error})

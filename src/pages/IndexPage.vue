@@ -1,17 +1,24 @@
 <template>
   <q-page class="flex flex-center">
-    <img
-      alt="Quasar logo"
-      src="~assets/quasar-logo-vertical.svg"
-      style="width: 200px; height: 200px"
-    >
+    <h1>{{this.user.details.username}}</h1>
   </q-page>
 </template>
 
 <script>
 import { defineComponent } from 'vue'
+import { useUserStore } from "stores/user";
 
 export default defineComponent({
-  name: 'IndexPage'
+  name: 'IndexPage',
+  data(){
+    return{
+      user: useUserStore()
+    }
+  },
+  mounted: function(){
+    if(!this.user.token){
+      this.$router.push("/login");
+    }
+  }
 })
 </script>
