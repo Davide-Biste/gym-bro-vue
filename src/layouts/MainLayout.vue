@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          Gym Bro
         </q-toolbar-title>
 
         <q-btn color="red" text-color="white" label="Logout" @click="logout"/>
