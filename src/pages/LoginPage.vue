@@ -45,6 +45,7 @@
   </q-page>
 </template>
 <script>
+import auth from "../api/auth";
 export default {
   data(){
     return{
@@ -54,22 +55,10 @@ export default {
     }
   },
   methods:{
-    onSubmit(){
-      if(this.accept !== true){
-        $q.notify({
-          color: 'red-5',
-          textColor: 'white',
-          icon: 'warning',
-          message: 'You need to accept the license and terms first'
-        })
-      }
-      else{
-        this.$q.notify({
-          color: 'green-4',
-          textColor: 'white',
-          icon: 'cloud_done',
-          message: 'Submitted'
-        })
+    onSubmit: async function(){
+      if(this.accept){
+        await auth.login(this.username, this.password);
+        this.$router.push("/home");
       }
     },
     onReset(){
