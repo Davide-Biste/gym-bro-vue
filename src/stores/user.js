@@ -24,5 +24,6 @@ export const useUserStore = defineStore('user', {
     user(){
       return { id: this.id, token: this.token, details: this.details };
     }
-  }
+  },
+  persist: true,
 })

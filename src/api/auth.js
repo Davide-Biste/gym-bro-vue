@@ -1,9 +1,16 @@
 import {api} from 'boot/axios';
+import { useUserStore } from "stores/user";
 export default {
-  login: async (email, password) => {
+  login: async (username, password) => {
     try {
-      const { data: token } = await api.post('/auth/login', { email, password });
-      console.log(token)
+      const { data: token } = await api.post('/auth/login', {}, {
+        auth: {
+          username,
+          password
+        }
+      });
+      const user = useUserStore();
+      await user.setToken(token);
       return token;
     } catch (error) {
       console.log({error})

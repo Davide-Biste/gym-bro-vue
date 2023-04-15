@@ -58,7 +58,7 @@ export default {
     onSubmit: async function(){
       if(this.accept){
         await auth.login(this.username, this.password);
-        this.$router.push("/home");
+        this.$router.push("/");
       }
     },
     onReset(){
