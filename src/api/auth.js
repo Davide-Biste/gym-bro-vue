@@ -16,5 +16,12 @@ export default {
     } catch (error) {
       console.log({error})
     }
+  },
+  register: async (username, password) => {
+    try {
+      return await api.post('/users', {username, password});
+    } catch (error) {
+      console.log({error})
+    }
   }
 }

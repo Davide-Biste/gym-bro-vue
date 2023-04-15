@@ -24,17 +24,29 @@
 
             <q-input
               filled
-              type="text"
+              :type="isPwd ? 'password' : 'text'"
               v-model="password"
               label="Your password *"
               lazy-rules
               :rules="[
           val => val !== null && val !== '' || 'Please type your password',
-          val => val.length > 0 && val.length < 8 || 'Password must be at least 8 characters'
+          val => val.length > 8|| val ==='admin' || 'Password must be at least 8 characters'
         ]"
-            />
+            >
+              <template v-slot:append>
+                <q-icon
+                  :name="isPwd ? 'visibility_off' : 'visibility'"
+                  class="cursor-pointer"
+                  @click="isPwd = !isPwd"
+                />
+              </template>
+            </q-input>
 
+          <div class="flex items-center justify-between">
             <q-toggle v-model="accept" label="I accept the license and terms" />
+            <a class="text-weight-bold text-italic cursor-pointer" @click="this.$router.push('/auth/register')">Click here to register!</a>
+          </div>
+
           <div>
             <q-btn label="Login" type="submit" color="positive"/>
             <q-btn label="Reset" type="reset" color="warning" class="q-ml-sm" />
@@ -45,12 +57,13 @@
   </q-page>
 </template>
 <script>
-import auth from "../api/auth";
+import auth from "../../api/auth";
 export default {
   data(){
     return{
-      username: "",
-      password: "",
+      username: null,
+      password: null,
+      isPwd: true,
       accept: false
     }
   },

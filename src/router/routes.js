@@ -6,14 +6,23 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') }
     ]
-  },{
-    path: '/login',
+  },
+  {
+    path: '/auth',
     component: () => import('layouts/LoginLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/LoginPage.vue') }
+      { path: '', component: () => import('pages/Auth/LoginPage.vue') },
+      { path: 'register', component: () => import('pages/Auth/RegisterPage.vue') }
     ]
   },
-
+  {
+    path: '/training',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/Training/NewTrainingPage.vue') },
+      { path: '/ongoing/:id', component: () => import('pages/Training/NewTrainingPage.vue') }
+    ],
+  },
   // Always leave this as last one,
   // but you can also remove it
   {

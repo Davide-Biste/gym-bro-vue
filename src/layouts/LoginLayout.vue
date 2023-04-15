@@ -5,7 +5,7 @@
       <q-header elevated class="bg-primary text-white">
         <q-toolbar>
           <q-toolbar-title>
-            <q-avatar>
+            <q-avatar @click="this.$router.push('/')">
               <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
             </q-avatar>
             Gym bro

@@ -17,7 +17,7 @@ export default defineComponent({
   },
   mounted: function(){
     if(!this.user.token){
-      this.$router.push("/login");
+      this.$router.push("/auth");
     }
   }
 })
