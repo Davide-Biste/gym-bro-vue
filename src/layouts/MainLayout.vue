@@ -15,7 +15,7 @@
           Quasar App
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <q-btn color="red" text-color="white" label="Logout" @click="logout"/>
       </q-toolbar>
     </q-header>
 
@@ -48,6 +48,7 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
+import { useUserStore } from "stores/user";
 
 const linksList = [
   {
@@ -99,6 +100,17 @@ export default defineComponent({
 
   components: {
     EssentialLink
+  },
+  data(){
+    return {
+      user: useUserStore()
+    }
+  },
+  methods: {
+    logout () {
+      this.user.setToken("");
+      this.$router.push("/login");
+    }
   },
 
   setup () {
