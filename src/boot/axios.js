@@ -14,7 +14,8 @@ api.interceptors.request.use(
   (config) => {
     // Do something before request is sent
 
-    config.headers.Authorization = config.headers.Authorization || `Bearer ${user.token}`
+    console.log({user})
+    config.headers.Authorization = config.headers.Authorization || `Bearer ${user.token.token}`
     return config;
   },
   (error) => {
