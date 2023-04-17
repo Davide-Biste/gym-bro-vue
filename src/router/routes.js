@@ -20,7 +20,7 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/Training/NewTrainingPage.vue') },
-      { path: '/ongoing/:id', component: () => import('pages/Training/NewTrainingPage.vue') }
+      { path: 'ongoing/:id', component: () => import('pages/Training/OnGoingTrainingPage.vue'), props: true },
     ],
   },
   // Always leave this as last one,
