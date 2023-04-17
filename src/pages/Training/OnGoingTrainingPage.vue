@@ -8,29 +8,70 @@
       :columns="columns"
       row-key="name"
     />
-    <q-select
-      filled
-      v-model="selectedNames"
-      :options="options"
-      stack-label
-      use-chips
-      use-input
-      @new-value="createValue"
-      @filter="filterFn"
-      label="Nuovo Esercizio"
-    />
+    <q-form
+      @submit="onSubmitExercise"
+      class="q-gutter-md q-pa-md flex-center"
+    >
+      <q-select
+        filled
+        v-model="names"
+        :options="filterOptions"
+        stack-label
+        use-chips
+        use-input
+        @new-value="createValue"
+        @filter="filterFn"
+        label="Nuovo Esercizio"
+        lazy-rules
+        :rules="[ val => val && val.length > 0 || 'Please type something']"
+      />
+        <q-btn push color="white" type="submit" text-color="primary" label="Nuovo Esercizio" />
+    </q-form>
+
   </div>
 </div>
 </template>
 
 <script>
 import { getTrainingById } from "src/api/training";
-import { getExerciseByTrainingId } from "src/api/exercise";
-import _ from "lodash";
+import { getExerciseByTrainingId, postNewExercise } from "src/api/exercise";
 import { getAllListExercise } from "src/api/list-exercise";
+import { ref } from "vue";
 
+const stringOptions = [];
 export default {
   name: "OnGoingTrainingPage",
+  setup () {
+  const filterOptions = ref(stringOptions)
+
+  return {
+  names: ref(null),
+  filterOptions,
+
+  createValue (val, done) {
+  if (val.length > 0) {
+  if (!stringOptions.includes(val)) {
+  stringOptions.push(val)
+}
+  done(val, 'toggle')
+}
+},
+
+  filterFn (val, update) {
+  update(() => {
+  if (val === '') {
+  filterOptions.value = stringOptions
+}
+  else {
+  const needle = val.toLowerCase()
+  filterOptions.value = stringOptions.filter(
+  v => v.toLowerCase().indexOf(needle) > -1
+  )
+}
+})
+}
+}
+},
   data(){
     return{
       currentTraining: {},
@@ -45,48 +86,32 @@ export default {
           format: val => `${val}`,
         },
       ],
-      names:[],
       selectedNames:[],
     }
   },
   methods: {
     getTraining: async function() {
-      const training = await getTrainingById(this.$route.params.id);
-      this.currentTraining = training;
+      this.currentTraining = await getTrainingById(this.$route.params.id);
     },
     getExercise: async function() {
-      const exercise = await getExerciseByTrainingId(this.$route.params.id);
-      this.rows = exercise;
+      this.rows = await getExerciseByTrainingId(this.$route.params.id);
     },
     getListExercise: async function(){
       const list = await getAllListExercise();
       console.log({list})
-      this.names = list;
-    },
-    createValue (val, done) {
-      if (val.length > 0) {
-        const isPresent = _.includes(this.names,val);
-        console.log({isPresent})
-        //TODO: sistemare
-        done(val, 'toggle')
+      for(let i = 0; i < list.length; i++){
+        stringOptions.push(list[i].name);
       }
     },
-    filterFn (val, update) {
-      update(()=>{
-        const needle = val.toLowerCase()
-        return this.options.filter(v => v.toLowerCase().indexOf(needle) > -1)
-      })
-    },
+    onSubmitExercise: async function(){
+      const res = postNewExercise($route.params.id, "daverificare");
+      console.log({res});
+    }
   },
   mounted() {
     this.getTraining();
     this.getExercise();
     this.getListExercise();
-  },
-  computed: {
-    options() {
-      return this.names.map(name => name.name);
-    }
   },
 };
 </script>

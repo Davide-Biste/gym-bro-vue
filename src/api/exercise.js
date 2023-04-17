@@ -9,3 +9,8 @@ export const getExerciseByTrainingId = async (id) => {
     console.log({errorGetExerciseByTrainingId: e});
   }
 }
+
+export const postNewExercise = async (trainingId, idList) => {
+  const {data} = await api.post(`/exercise/training/${trainingId}/list/${idList}`);
+  return data;
+}
