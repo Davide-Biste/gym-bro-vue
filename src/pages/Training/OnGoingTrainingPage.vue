@@ -27,7 +27,13 @@
       />
         <q-btn push color="white" type="submit" text-color="primary" label="Nuovo Esercizio" />
     </q-form>
-
+  </div>
+  <div class="absolute-bottom">
+    <div class="row">
+      <div>
+        <q-btn  size="xl" color="red-6" icon-right="home" label="Home" class="window-width hei"/>
+      </div>
+    </div>
   </div>
 </div>
 </template>

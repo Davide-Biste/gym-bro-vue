@@ -21,3 +21,8 @@ export const getTrainingById = async (id) => {
   const {data} = await api.get("/training/id/" + id);
   return data;
 }
+
+export const getOnGoingTraining = async () => {
+  const {data} = await api.get("/training/ongoing");
+  return data;
+}
