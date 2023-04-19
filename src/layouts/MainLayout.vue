@@ -11,7 +11,7 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title>
+        <q-toolbar-title @click="this.$router.push('/')">
           Gym Bro
         </q-toolbar-title>
 
@@ -28,7 +28,7 @@
         <q-item-label
           header
         >
-          Essential Links
+          Un po' di link utili...
         </q-item-label>
 
         <EssentialLink

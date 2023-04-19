@@ -104,8 +104,10 @@ export default {
       }
     },
     onSubmitExercise: async function(){
-      const res = postNewExercise(this.$route.params.id, this.names);
-      console.log({res});
+      const res = await postNewExercise(this.$route.params.id, this.names);
+      if(res){
+        await this.getExercise();
+      }
     }
   },
   mounted() {
