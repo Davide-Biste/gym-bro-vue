@@ -32,7 +32,6 @@ export default defineComponent({
       }
     },
     pushToTraining: function() {
-      console.log({onGoing: this.onGoingTraining});
       this.$router.push("/training/ongoing/" + this.onGoingTraining._id);
     }
   },

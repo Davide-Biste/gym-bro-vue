@@ -21,3 +21,13 @@ export const postNewExercise = async (trainingId, name) => {
     console.log({errorPostNewExercise: e});
   }
 }
+
+export const getSingleExercise = async (id) => {
+  try{
+    const {data} = await api.get("/exercise/" + id);
+    return data;
+  }
+  catch(e){
+    console.log({errorGetSingleExercise: e});
+  }
+}

@@ -21,6 +21,7 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/Training/NewTrainingPage.vue') },
       { path: 'ongoing/:id', component: () => import('pages/Training/OnGoingTrainingPage.vue'), props: true },
+      { path: 'ongoing/:id/exercise/:id', component: () => import('pages/Exercise/CurrentExercise.vue'), props: { exercise: true } },
     ],
   },
   // Always leave this as last one,
