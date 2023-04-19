@@ -82,7 +82,7 @@ export default {
           required: true,
           label: 'Name of exercise',
           align: 'left',
-          field: row => row.name,
+          field: row => row?.listExercise?.name,
           format: val => `${val}`,
         },
       ],
@@ -95,16 +95,16 @@ export default {
     },
     getExercise: async function() {
       this.rows = await getExerciseByTrainingId(this.$route.params.id);
+      console.log(this.rows)
     },
     getListExercise: async function(){
       const list = await getAllListExercise();
-      console.log({list})
       for(let i = 0; i < list.length; i++){
         stringOptions.push(list[i].name);
       }
     },
     onSubmitExercise: async function(){
-      const res = postNewExercise($route.params.id, "daverificare");
+      const res = postNewExercise(this.$route.params.id, this.names);
       console.log({res});
     }
   },
