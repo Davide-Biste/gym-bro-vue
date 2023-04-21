@@ -21,7 +21,8 @@ import { getSingleExercise } from "src/api/exercise";
 import { getReps } from "src/api/reps";
 import moment from "moment";
 import { useQuasar } from "quasar";
-import DialogAddReps from "components/DialogAddReps";
+import DialogAddReps from "components/DialogAddReps.vue";
+import { useRoute } from "vue-router/dist/vue-router";
 
 export default {
   name: "CurrentExercise",
@@ -59,7 +60,7 @@ export default {
           name: 'rest',
           label: 'Pausa',
           field: row=> row.rest,
-          format: val => `${moment(val).format('ss')} sec`,
+          format: val => `${moment.duration(val,"second").minutes()}:${moment.duration(val,"second").seconds() < 10 ? '0' : ''}${moment.duration(val,"second").seconds()}`,
           align: 'right',
           sortable: true,
         }]
@@ -70,9 +71,13 @@ export default {
     this.getReps();
   },
   methods: {
-    async getExercise() {
+    async getExercise(){
       this.exercise = await getSingleExercise(this.$route.params.id);
-      console.log({ exercise: this.exercise })
+
+    },
+    async secondsToMinutesAndSeconds(seconds) {
+      const duration = moment.duration(seconds, 'seconds');
+      return duration.minutes() + ':' + (duration.seconds() < 10 ? '0' : '') + duration.seconds();
     },
     async getReps(){
       const res = await getReps(this.$route.params.id);
@@ -80,12 +85,22 @@ export default {
     }
   },
   setup () {
-    const $q = useQuasar()
+    const $q = useQuasar();
+    const route = useRoute();
+
     function radio (){
+      const exerciseId = route.params.id;
       $q.dialog({
         component: DialogAddReps,
-      }).onOk(data => {
-        // console.log('>>>> OK, received', data)
+        componentProps: {
+         exerciseId: exerciseId
+        }
+      }).onOk((data) => {
+        console.log('>>>> OK, received', data);
+      }).onCancel(() => {
+        console.log('>>>> CANCELLED')
+      }).onDismiss(() => {
+        console.log('>>>> DISMISSED')
       })
     }
     return {

@@ -2,7 +2,8 @@ import { api } from "boot/axios";
 
 export const getReps = async (idExercise) => {
   try {
-    const res = api.get(`/reps/exercise/${idExercise}`);
+    const res = await api.get(`/reps/exercise/${idExercise}`);
+    console.log({reps: res});
     return res;
   }
   catch(e){
@@ -12,8 +13,10 @@ export const getReps = async (idExercise) => {
 }
 
 export const newReps = async (idExercise, rest, series, weight ) => {
-  const obj = { rest, series, weight, }
-  const { data: res } = api.post(`/reps/exercise/${idExercise}`, { obj });
+  const { data: res } = await api.post(`/reps/exercise/${idExercise}`, {
+      rest: rest,
+      series: series,
+      weight: weight,
+});
   return res;
 }
-

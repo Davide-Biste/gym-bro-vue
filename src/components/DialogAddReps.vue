@@ -2,13 +2,13 @@
   <q-dialog ref="dialogRef" @hide="onDialogHide">
     <q-card class="q-dialog-plugin">
         <div class="q-pa-md" style="max-width: 400px">
-
+          <h1>{{exerciseId}}</h1>
           <q-form
             @submit="onSubmit"
             @reset="onReset"
-            class="q-gutter-md"
           >
             <q-input
+              class="q-ma-sm"
               filled
               v-model="series"
               type="number"
@@ -21,6 +21,7 @@
             />
             <q-input
               filled
+              class="q-ma-sm"
               v-model="weight"
               type="number"
               label="Peso"
@@ -32,6 +33,7 @@
             />
             <q-input
               filled
+              class="q-ma-sm"
               v-model="rest"
               type="number"
               label="Pausa"
@@ -42,66 +44,74 @@
                 val => val > 0 || 'Inserisci un valore maggiore di 0', ]"
             />
 
-            <div>
-              <q-btn label="Submit" type="submit" color="primary"/>
-              <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+            <div class="flex justify-center full-width q-ma-sm">
+              <q-btn size="md" class="flex items-center full-width" label="Inserisci" type="submit" color="green-5"/>
             </div>
           </q-form>
         </div>
-      <q-card-actions align="right">
-        <q-btn color="primary" label="Cancel" @click="onDialogCancel" />
+      <q-card-actions class="full-width" align="center">
+        <q-btn class="full-width" color="red-5" label="Annulla" @click="onDialogCancel" />
       </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
 
-<script setup>
+<script>
 import { useDialogPluginComponent } from 'quasar'
-import { ref } from "vue";
+import { newReps } from "src/api/reps";
 
-const props = defineProps({
+export default {
+  data(){
+    return{
+      series: null,
+      weight: null,
+      rest: 60,
+    }
+  },
+  props: ["exerciseId"],
+  emits: [
+    // REQUIRED; need to specify some events that your
+    // component will emit through useDialogPluginComponent()
+    ...useDialogPluginComponent.emits
+  ],
+  methods:{
+    async onSubmit () {
+      try{
+        const res = await newReps(this.exerciseId,this.rest, this.series, this.weight);
+        this.onOKClick(res);
+      }
+      catch(e){
+        console.log(e);
+        return [];
+      }
+    },
 
-});
+    onReset () {
+      this.series = null;
+      this.reps = null;
+      this.weight = null;
+    },
+    checkRest(rest){
+      return rest > 0;
+    },
+  },
+  setup () {
+    const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
+    return {
 
-const series = ref(null);
-const rest = ref(60);
-const weight = ref(null);
+      dialogRef,
+      onDialogHide,
 
-defineEmits([
-  // REQUIRED; need to specify some events that your
-  // component will emit through useDialogPluginComponent()
-  ...useDialogPluginComponent.emits
-])
-
-function onSubmit () {
- console.log({ series, rest, weight });
-  onDialogOK();
-  // or with payload: onDialogOK({ ... })
-  // ...and it will also hide the dialog automatically
-}
-function onReset () {
-  this.series = null;
-  this.reps = null;
-  this.weight = null;
-}
-function checkRest(rest){
-  return rest > 0 && rest;
-}
-
-const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
-// dialogRef      - Vue ref to be applied to QDialog
-// onDialogHide   - Function to be used as handler for @hide on QDialog
-// onDialogOK     - Function to call to settle dialog with "ok" outcome
-//                    example: onDialogOK() - no payload
-//                    example: onDialogOK({ /*...*/ }) - with payload
-// onDialogCancel - Function to call to settle dialog with "cancel" outcome
-
-// this is part of our example (so not required)
-function onOKClick () {
-  // on OK, it is REQUIRED to
-  // call onDialogOK (with optional payload)
-  onDialogOK()
-  // or with payload: onDialogOK({ ... })
-  // ...and it will also hide the dialog automatically
+      onOKClick (res) {
+        // on OK, it is REQUIRED to
+        // call onDialogOK (with optional payload)
+        onDialogOK(res)
+        // or with payload: onDialogOK({ ... })
+        // ...and it will also hide the dialog automatically
+      },
+      onDialogCancel,
+      onCancelClick: onDialogCancel
+    }
+  }
 }
 </script>
