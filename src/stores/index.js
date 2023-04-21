@@ -4,7 +4,7 @@ import { PiniaLogger } from "pinia-logger";
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 export default store(() => {
-  const pinia = createPinia()
+  const pinia = createPinia();
   const logger = PiniaLogger();
   pinia.use(piniaPluginPersistedstate);
   pinia.use(logger);

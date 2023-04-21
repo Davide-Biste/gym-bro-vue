@@ -1,9 +1,12 @@
 import { api } from "boot/axios";
+import { useRepsStore } from "stores/reps";
 
 export const getReps = async (idExercise) => {
   try {
-    const res = await api.get(`/reps/exercise/${idExercise}`);
-    console.log({reps: res});
+    const { data: res } = await api.get(`/reps/exercise/${idExercise}`);
+    const reps = useRepsStore();
+    await reps.initReps();
+    await reps.firstSetReps(res);
     return res;
   }
   catch(e){
@@ -18,5 +21,14 @@ export const newReps = async (idExercise, rest, series, weight ) => {
       series: series,
       weight: weight,
 });
+  const reps = useRepsStore();
+  await reps.pushReps(res);
+  return res;
+}
+
+export const deleteReps = async (props)=>{
+  const { data: res } = await api.delete(`/reps/${props.row._id}`);
+  const reps = useRepsStore();
+  await reps.deleteReps(props);
   return res;
 }
